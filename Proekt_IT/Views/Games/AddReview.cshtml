@@ -1,0 +1,24 @@
+﻿@model Proekt_IT.Models.Review
+
+@{
+    ViewBag.Title = "AddReview";
+}
+
+<h2>Add review for game: @ViewBag.Game.Name</h2>
+
+@using (Html.BeginForm("AddReview", "Games"))
+{
+    @Html.HiddenFor(model => model.GameId)
+    <div class="form-group">
+        @Html.LabelFor(model => model.Text)
+        @Html.TextAreaFor(model => model.Text)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Rating)
+        @Html.DropDownListFor(model => model.Rating, new SelectList(ViewBag.ratings))
+    </div>
+    @Html.HiddenFor(model => model.UserEmail)
+    <div class="form-group">
+        <input type="submit" value="Add Review" class="btn btn-default" />
+    </div>
+}

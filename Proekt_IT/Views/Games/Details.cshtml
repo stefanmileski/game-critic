@@ -1,0 +1,103 @@
+﻿@model Proekt_IT.Models.Game
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details for @Model.Name</h2>
+
+<div>
+    <hr />
+    <div class="row">
+        <div class="col-lg-6">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Name)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Name)
+                </dd></br>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Genre.Name)
+                </dt>
+
+                <dd>
+                    @Html.ActionLink(Model.Genre.Name, "Details", "Genres", new { id = Model.GenreId }, null)
+                </dd></br>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Publisher.Name)
+
+                </dt>
+
+                <dd>
+                    @Html.ActionLink(Model.Publisher.Name, "Details", "Publishers", new { id = Model.PublisherId }, null)
+                </dd></br>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Description)
+                </dd></br>
+                <dt>
+                    @Html.Label("Rating")
+                </dt>
+
+                <dd>
+                    @{
+                        double average = Model.AverageRating();
+                        string averageString = average.ToString("0.00");
+                        string color;
+                        if (Model.Reviews.Count == 0)
+                        {
+                            color = "black";
+                            averageString = "No Ratings";
+                        }
+                        else if (average < 3.3)
+                        {
+                            color = "red";
+                        }
+                        else if (average < 6.7)
+                        {
+                            color = "#F6BE00";
+                        }
+                        else
+                        {
+                            color = "green";
+                        }
+                        string styleString = "color:" + @color;
+                    }
+                    <label class="borderAndSize" style=@styleString>@averageString</label>
+                </dd> </br>
+                <dt>
+                    @Html.Label("Reviews")
+                </dt>
+
+                <dd>
+                    @{ string reviewCount = "(" + Model.Reviews.Count.ToString() + ")"; }
+                    @Html.ActionLink(reviewCount, "ShowReviews", new { id = Model.GameId }, new { style="font-size:20px;" })
+                </dd>
+            </dl>
+        </div>
+        <div class="col-lg-6">
+            <img src="@Model.ImageUrl" alt="@Model.Name" class="width200">
+        </div>
+    </div>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.GameId }, new { @class = "btn-default btn" })
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn-default btn" })
+</p>
+
+<style>
+    .width200 {
+        width: 200px;
+    }
+    .borderAndSize {
+        font-size: 20px;
+        -webkit-text-stroke: 0.5px black;
+    }
+</style>

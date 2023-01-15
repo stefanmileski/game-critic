@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Proekt_IT.Models.Genre>
+
+@{
+    ViewBag.Title = "Genres";
+}
+
+<h2>Genres</h2>
+
+@if (User.IsInRole("Administrator") || User.IsInRole("Editor"))
+{
+    <p>
+        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    </p>
+}
+<table class="table" id="genresTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.Label("Games")
+            </th>
+            @if (User.IsInRole("Administrator") || User.IsInRole("Editor"))
+            {
+                <th></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(item.Name, "Details", new { id = item.GenreId }, new { style = "font-size:20px;" })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.ActionLink("(" + item.Games.Count + ")", "Details", new { id = item.GenreId }, new { style = "font-size:20px;" })
+                </td>
+                @if (User.IsInRole("Administrator") || User.IsInRole("Editor"))
+                {
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.GenreId }, new { @class = "btn-default btn" })
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            @Html.ActionLink("Delete", "Delete", new { id = item.GenreId }, new { @class = "btn-default btn" })
+                        }
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script>
+        $("#genresTable").DataTable();
+    </script>
+}

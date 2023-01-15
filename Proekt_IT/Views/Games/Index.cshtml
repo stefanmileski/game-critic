@@ -1,0 +1,127 @@
+﻿@model IEnumerable<Proekt_IT.Models.Game>
+@using Proekt_IT.Models
+@{
+    ViewBag.Title = "Games";
+}
+
+<h2>Games</h2>
+
+@if (User.IsInRole("Administrator") || User.IsInRole("Editor"))
+{
+    <p>
+        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    </p>
+}
+<table class="table" id="gamesTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImageUrl)
+            </th>
+            <th>
+                @Html.Label("Genre")
+            </th>
+            <th>
+                @Html.Label("Publisher")
+            </th>
+            <th>
+                @Html.Label("Rating")
+            </th>
+            <th>
+                @Html.Label("Reviews")
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(item.Name, "Details", new { id = item.GameId }, new { @class="size20px" })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    <img src="@item.ImageUrl" alt="@item.Name" class="width200">
+                </td>
+                <td>
+                    @Html.ActionLink(item.Genre.Name, "Details", "Genres", new { id = item.GenreId }, new { @class = "size15px" })
+                </td>
+                <td>
+                    @Html.ActionLink(item.Publisher.Name, "Details", "Publishers", new { id = item.PublisherId }, new { @class = "size15px" })
+                </td>
+                <td>
+                    @{
+                        double average = item.AverageRating();
+                        string averageString = average.ToString("0.00");
+                        string color;
+                        if (item.Reviews.Count == 0)
+                        {
+                            color = "black";
+                            averageString = "No Ratings";
+                        }
+                        else if (average < 3.3)
+                        {
+                            color = "red";
+                        }
+                        else if (average < 6.7)
+                        {
+                            color = "#F6BE00";
+                        }
+                        else
+                        {
+                            color = "green";
+                        }
+                        string styleString = "color:" + @color;
+                    }
+                    <label class="borderAndSize" style=@styleString>@averageString</label>
+                </td>
+                <td>
+                    @{ string reviewCount = "(" + item.Reviews.Count.ToString() + ")"; }
+                    @Html.ActionLink(reviewCount, "ShowReviews", new { id = item.GameId }, new { style = "font-size:20px" })
+                </td>
+                <td>
+                    @if (User.IsInRole("Administrator") || User.IsInRole("Editor"))
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = item.GameId }, new { @class = "btn-default btn" })
+                    }
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        @Html.ActionLink("Delete", "Delete", new { id = item.GameId }, new { @class = "btn-default btn" })
+                    }
+                    @Html.ActionLink("Add Review", "AddReview", new { id = item.GameId }, new { @class = "btn-default btn" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    .borderAndSize {
+        font-size: 20px;
+        -webkit-text-stroke: 0.5px black;
+    }
+    .size20px {
+        font-size: 20px;
+    }
+    .size15px {
+        font-size: 15px;
+    }
+    .width200 {
+        width: 200px;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        $("#gamesTable").DataTable();
+    </script>
+}

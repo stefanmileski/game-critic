@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Proekt_IT.Models.Publisher>
+
+@{
+    ViewBag.Title = "Publishers";
+}
+
+<h2>Publishers</h2>
+
+@if (User.IsInRole("Administrator") || User.IsInRole("Editor"))
+{
+    <p>
+        @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    </p>
+}
+<table class="table" id="publishersTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LogoUrl)
+            </th>
+            <th>
+                @Html.Label("Number of Games")
+            </th>
+            @if (User.IsInRole("Administrator") || User.IsInRole("Editor"))
+            {
+                <th></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(item.Name, "Details", new { id = item.PublisherId }, new { style ="font-size:20px;"})
+                </td>
+                <td>
+                    <img src="@item.LogoUrl" alt="@item.Name" class="width125">
+                </td>
+                <td>
+                    @Html.ActionLink("(" + item.Games.Count.ToString() + ")", "Details", new { id = item.PublisherId }, new { style = "font-size:20px;" })
+                </td>
+                @if (User.IsInRole("Administrator") || User.IsInRole("Editor"))
+                {
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.PublisherId }, new { @class = "btn-default btn" })
+                        @if (User.IsInRole("Administrator"))
+                        {
+                            @Html.ActionLink("Delete", "Delete", new { id = item.PublisherId }, new { @class = "btn-default btn" })
+                        }
+                    </td>
+                }
+                </tr>
+        }
+    </tbody>
+
+</table>
+
+<style>
+    .width125 {
+        width: 125px;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        $("#publishersTable").DataTable();
+    </script>    
+}

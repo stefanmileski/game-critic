@@ -1,0 +1,69 @@
+﻿@model IEnumerable<Proekt_IT.Models.Review>
+
+@{
+    ViewBag.Title = "ShowReviews";
+}
+
+<h2>Reviews for @Model.First().Game.Name</h2>
+
+<table class="table" id="reviewsTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Text)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rating)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink(item.UserEmail, "UserReviews", "Reviews", new { mail = item.UserEmail }, null)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Text)
+                </td>
+                <td>
+                    @{
+                        double average = item.Rating;
+                        string color;
+                        if (average < 3.3)
+                        {
+                            color = "red";
+                        }
+                        else if (average < 6.7)
+                        {
+                            color = "#F6BE00";
+                        }
+                        else
+                        {
+                            color = "green";
+                        }
+                        string styleString = "color:" + @color;
+                    }
+                    <label class="borderAndSize" style=@styleString>@item.Rating</label>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    .borderAndSize {
+        font-size: 20px;
+        -webkit-text-stroke: 0.5px black;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        $("#reviewsTable").DataTable();
+    </script>
+}
