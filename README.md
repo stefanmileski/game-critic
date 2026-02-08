@@ -1,6 +1,6 @@
 # GameCritic
 
-Проект по предметот Интернет Технологии
+An IMDB inspired Game rating and review web app. Made in ASP.NET With Razor pages.
 
 ![image](https://user-images.githubusercontent.com/52272289/212509128-5e317a2a-22b6-4500-9343-4652ce699c2a.png)
 
